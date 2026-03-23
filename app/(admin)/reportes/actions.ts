@@ -40,10 +40,7 @@ export async function cambiarEstadoReporte(
   // Update reporte
   const { error: updErr } = await supabase
     .from("reportes")
-    .update({
-      estado: parsed.data.estado_nuevo,
-      updated_at: new Date().toISOString(),
-    })
+    .update({ estado: parsed.data.estado_nuevo })
     .eq("id", reporteId)
 
   if (updErr) {
