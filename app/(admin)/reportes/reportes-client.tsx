@@ -37,12 +37,12 @@ const estadoLabel: Record<EstadoReporte, string> = {
   Resuelto: "Resuelto",
 }
 
-const categoriaColors: Record<CategoriaReporte, string> = {
-  Fuga: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
-  "Sin Agua": "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
-  "Baja Presión": "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
-  Contaminación: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
-  Infraestructura: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300",
+const categoriaBadgeClass: Record<CategoriaReporte, string> = {
+  Fuga: "border-chart-1/30 bg-chart-1/15 text-chart-1",
+  "Sin Agua": "border-destructive/25 bg-destructive/10 text-destructive",
+  "Baja Presión": "border-chart-3/30 bg-chart-3/15 text-chart-3",
+  Contaminación: "border-chart-2/30 bg-chart-2/15 text-chart-2",
+  Infraestructura: "border-chart-4/30 bg-chart-4/15 text-chart-4",
 }
 
 interface ReportesClientProps {
@@ -163,11 +163,12 @@ export function ReportesClient({ reportes }: ReportesClientProps) {
                     {reporte.titulo}
                   </TableCell>
                   <TableCell>
-                    <span
-                      className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${categoriaColors[reporte.categoria]}`}
+                    <Badge
+                      variant="outline"
+                      className={categoriaBadgeClass[reporte.categoria]}
                     >
                       {reporte.categoria}
-                    </span>
+                    </Badge>
                   </TableCell>
                   <TableCell>
                     <Badge variant={estadoBadgeVariant[reporte.estado]}>

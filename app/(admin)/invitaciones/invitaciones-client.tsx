@@ -86,6 +86,9 @@ export function InvitacionesClient({
     .filter((i) => selectedIds.has(i.id))
     .map((i) => ({ id: i.id, nombre_titular: i.nombre_titular }))
 
+  const disponibles = filtered.filter((inv) => !inv.usado).length
+  const usadas = filtered.length - disponibles
+
   function formatDate(dateStr: string | null) {
     if (!dateStr) return "—"
     return new Date(dateStr).toLocaleDateString("es-MX", {
@@ -115,31 +118,46 @@ export function InvitacionesClient({
       </div>
 
       <TabsContent value="listado" className="space-y-4">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-2">
-            <div className="relative">
+        <div className="rounded-lg border border-border/70 bg-card/30 p-4">
+          <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+            <div className="space-y-1">
+              <p className="text-sm font-medium">Consulta y preparación de folios</p>
+              <p className="text-sm text-muted-foreground">
+                {filtered.length} invitaciones visibles, {disponibles} disponibles y {usadas} usadas.
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_220px] xl:min-w-[620px]">
+              <div className="relative min-w-0">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Buscar por nombre, CURP o contrato..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-8 w-80"
+                className="w-full pl-8"
               />
+              </div>
+              <Select value={filtroUsado} onValueChange={setFiltroUsado}>
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="todas">Todas</SelectItem>
+                  <SelectItem value="usadas">Usadas</SelectItem>
+                  <SelectItem value="no_usadas">No usadas</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            <Select value={filtroUsado} onValueChange={setFiltroUsado}>
-              <SelectTrigger className="w-36">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="todas">Todas</SelectItem>
-                <SelectItem value="usadas">Usadas</SelectItem>
-                <SelectItem value="no_usadas">No usadas</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
-          {selectedIds.size > 0 && (
-            <QrPdfGenerator items={selectedItems} />
-          )}
+
+          <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border/60 pt-4">
+            <Badge variant="outline">{filtered.length} resultados</Badge>
+            {selectedIds.size > 0 && (
+              <>
+                <Badge variant="secondary">{selectedIds.size} seleccionadas</Badge>
+                <QrPdfGenerator items={selectedItems} />
+              </>
+            )}
+          </div>
         </div>
 
         <div className="rounded-md border">
@@ -183,7 +201,7 @@ export function InvitacionesClient({
                         onCheckedChange={() => toggleSelect(inv.id)}
                       />
                     </TableCell>
-                    <TableCell className="font-medium">
+                    <TableCell className="max-w-[280px] font-medium">
                       {inv.nombre_titular}
                     </TableCell>
                     <TableCell className="font-mono text-xs">

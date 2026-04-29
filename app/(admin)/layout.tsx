@@ -1,6 +1,7 @@
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
 import { AdminSidebar } from "@/components/admin-sidebar"
+import { ThemeToggle } from "../../components/theme-toggle"
 import { getAdminProfile } from "@/lib/supabase/auth"
 
 export default async function AdminLayout({
@@ -21,6 +22,9 @@ export default async function AdminLayout({
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mr-2 h-4" />
           <h1 className="text-sm font-medium">Panel Administrativo</h1>
+          <div className="ml-auto">
+            <ThemeToggle />
+          </div>
         </header>
         <main className="flex-1 p-4 md:p-6">{children}</main>
       </SidebarInset>

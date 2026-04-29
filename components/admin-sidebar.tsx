@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import {
   Sidebar,
   SidebarContent,
@@ -73,6 +73,7 @@ interface AdminSidebarProps {
 
 export function AdminSidebar({ userName, userRole }: AdminSidebarProps) {
   const pathname = usePathname()
+  const router = useRouter()
   const visibleItems = navItems.filter((item) => item.roles.includes(userRole))
   const initials = userName
     .split(" ")
@@ -104,7 +105,12 @@ export function AdminSidebar({ userName, userRole }: AdminSidebarProps) {
               {visibleItems.map((item) => (
                 <SidebarMenuItem key={item.href}>
                   <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)}>
-                    <Link href={item.href}>
+                    <Link
+                      href={item.href}
+                      prefetch
+                      onMouseEnter={() => router.prefetch(item.href)}
+                      onFocus={() => router.prefetch(item.href)}
+                    >
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
                     </Link>
