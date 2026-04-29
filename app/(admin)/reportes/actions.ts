@@ -105,7 +105,7 @@ export async function eliminarReporte(reporteId: string) {
   return { success: true }
 }
 
-export async function asignarReporte(reporteId: string, coordinadorId: string | null) {
+export async function asignarReporte(reporteId: string, tecnicoId: string | null) {
   const perfil = await getAdminProfile()
   if (perfil.rol !== "admin") {
     return { error: "No tienes permisos para asignar reportes." }
@@ -115,7 +115,7 @@ export async function asignarReporte(reporteId: string, coordinadorId: string | 
   const { error } = await supabase
     .from("reportes")
     .update({
-      asignado_a: coordinadorId,
+      asignado_a: tecnicoId,
       updated_at: new Date().toISOString(),
     })
     .eq("id", reporteId)

@@ -9,7 +9,9 @@ export default async function ReportesPage() {
 
   const { data } = await supabase
     .from("reportes")
-    .select("*, perfiles_usuarios!reportes_usuario_id_fkey(nombre_completo)")
+    .select(
+      "*, perfiles_usuarios!reportes_usuario_id_fkey(nombre_completo), tecnico_asignado:perfiles_usuarios!reportes_asignado_a_fkey(nombre_completo)",
+    )
     .order("created_at", { ascending: false })
 
   return (

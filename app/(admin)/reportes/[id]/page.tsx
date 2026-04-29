@@ -18,7 +18,7 @@ export default async function ReporteDetallePage({
   const perfil = await getAdminProfile()
   const supabase = createAdminClient()
 
-  const [reporteRes, historialRes, comentariosRes, coordinadoresRes] =
+  const [reporteRes, historialRes, comentariosRes, tecnicosRes] =
     await Promise.all([
       supabase
         .from("reportes")
@@ -38,7 +38,7 @@ export default async function ReporteDetallePage({
       supabase
         .from("perfiles_usuarios")
         .select("id, nombre_completo")
-        .eq("rol", "coordinador"),
+        .eq("rol", "tecnico"),
     ])
 
   if (!reporteRes.data) notFound()
@@ -53,8 +53,8 @@ export default async function ReporteDetallePage({
       autor={reporte.perfiles_usuarios}
       historial={(historialRes.data ?? []) as HistorialEstadoConUsuario[]}
       comentarios={(comentariosRes.data ?? []) as ComentarioReporteConUsuario[]}
-      coordinadores={
-        (coordinadoresRes.data ?? []) as Pick<PerfilUsuario, "id" | "nombre_completo">[]
+      tecnicos={
+        (tecnicosRes.data ?? []) as Pick<PerfilUsuario, "id" | "nombre_completo">[]
       }
       userRole={perfil.rol}
     />

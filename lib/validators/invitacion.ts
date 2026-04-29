@@ -1,10 +1,12 @@
 import { z } from "zod/v4"
+import { curpErrorMessage, curpRegex } from "./patterns"
 
 export const invitacionSchema = z.object({
   curp: z
     .string()
-    .length(18, "La CURP debe tener exactamente 18 caracteres")
-    .toUpperCase(),
+    .trim()
+    .toUpperCase()
+    .regex(curpRegex, curpErrorMessage),
   numero_contrato: z
     .string()
     .min(1, "El número de contrato es requerido"),
@@ -28,7 +30,7 @@ export const invitacionSchema = z.object({
 export type InvitacionFormValues = z.infer<typeof invitacionSchema>
 
 export const invitacionExcelRowSchema = z.object({
-  curp: z.string().length(18, "CURP debe tener 18 caracteres").toUpperCase(),
+  curp: z.string().trim().toUpperCase().regex(curpRegex, curpErrorMessage),
   numero_contrato: z.string().min(1, "Contrato requerido"),
   nombre_titular: z.string().min(2, "Nombre requerido"),
   direccion: z.string().min(5, "Dirección requerida"),

@@ -65,7 +65,7 @@ interface ReporteDetalleClientProps {
   autor: Pick<PerfilUsuario, "nombre_completo"> | null
   historial: HistorialEstadoConUsuario[]
   comentarios: ComentarioReporteConUsuario[]
-  coordinadores: Pick<PerfilUsuario, "id" | "nombre_completo">[]
+  tecnicos: Pick<PerfilUsuario, "id" | "nombre_completo">[]
   userRole: RolUsuario
 }
 
@@ -82,7 +82,7 @@ export function ReporteDetalleClient({
   autor,
   historial,
   comentarios,
-  coordinadores,
+  tecnicos,
   userRole,
 }: ReporteDetalleClientProps) {
   const router = useRouter()
@@ -126,11 +126,11 @@ export function ReporteDetalleClient({
   // ── Assign ─────────────────────────────────────────────────────
   const [assignPending, startAssignTransition] = useTransition()
 
-  function handleAssign(coordinadorId: string) {
+  function handleAssign(tecnicoId: string) {
     startAssignTransition(async () => {
       const result = await asignarReporte(
         reporte.id,
-        coordinadorId === "none" ? null : coordinadorId,
+        tecnicoId === "none" ? null : tecnicoId,
       )
       if (result.error) toast.error(result.error)
       else toast.success("Reporte asignado")
@@ -387,13 +387,13 @@ export function ReporteDetalleClient({
             </CardContent>
           </Card>
 
-          {/* Assign coordinador (admin only) */}
+          {/* Assign tecnico (admin only) */}
           {isAdmin && (
             <Card>
               <CardHeader>
                 <CardTitle className="text-base">Asignar</CardTitle>
                 <CardDescription>
-                  Asigna el reporte a un coordinador.
+                  Asigna el reporte a un técnico.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -407,9 +407,9 @@ export function ReporteDetalleClient({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">Sin asignar</SelectItem>
-                    {coordinadores.map((c) => (
-                      <SelectItem key={c.id} value={c.id}>
-                        {c.nombre_completo}
+                    {tecnicos.map((tecnico) => (
+                      <SelectItem key={tecnico.id} value={tecnico.id}>
+                        {tecnico.nombre_completo}
                       </SelectItem>
                     ))}
                   </SelectContent>

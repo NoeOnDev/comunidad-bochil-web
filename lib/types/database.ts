@@ -1,6 +1,6 @@
 // ── Enums ────────────────────────────────────────────────────────────────────
 
-export type RolUsuario = "ciudadano" | "admin" | "coordinador"
+export type RolUsuario = "ciudadano" | "admin" | "coordinador" | "tecnico"
 
 export type EstadoReporte = "Pendiente" | "En Revision" | "En Progreso" | "Resuelto"
 
@@ -172,6 +172,7 @@ export interface DeviceToken {
 
 export interface ReporteConAutor extends Reporte {
   perfiles_usuarios: Pick<PerfilUsuario, "nombre_completo"> | null
+  tecnico_asignado: Pick<PerfilUsuario, "nombre_completo"> | null
 }
 
 export interface HistorialEstadoConUsuario extends HistorialEstado {

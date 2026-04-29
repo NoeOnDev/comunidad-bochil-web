@@ -32,6 +32,7 @@ import type {
 const rolBadgeVariant: Record<RolUsuario, "default" | "secondary" | "outline"> = {
   admin: "default",
   coordinador: "outline",
+  tecnico: "outline",
   ciudadano: "secondary",
 }
 

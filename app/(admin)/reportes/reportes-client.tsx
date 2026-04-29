@@ -137,6 +137,7 @@ export function ReportesClient({ reportes }: ReportesClientProps) {
               <TableHead>Título</TableHead>
               <TableHead>Categoría</TableHead>
               <TableHead>Estado</TableHead>
+              <TableHead>Asignado a</TableHead>
               <TableHead>Colonia</TableHead>
               <TableHead>Autor</TableHead>
               <TableHead className="text-center">Apoyos</TableHead>
@@ -149,7 +150,7 @@ export function ReportesClient({ reportes }: ReportesClientProps) {
             {filtered.length === 0 ? (
               <TableRow>
                 <TableCell
-                  colSpan={9}
+                  colSpan={10}
                   className="text-center text-muted-foreground py-8"
                 >
                   No se encontraron reportes.
@@ -172,6 +173,9 @@ export function ReportesClient({ reportes }: ReportesClientProps) {
                     <Badge variant={estadoBadgeVariant[reporte.estado]}>
                       {estadoLabel[reporte.estado]}
                     </Badge>
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {reporte.tecnico_asignado?.nombre_completo ?? "Sin asignar"}
                   </TableCell>
                   <TableCell>{reporte.colonia}</TableCell>
                   <TableCell className="text-muted-foreground">
