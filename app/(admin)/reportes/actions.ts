@@ -112,6 +112,21 @@ export async function asignarReporte(reporteId: string, tecnicoId: string | null
   }
 
   const supabase = createAdminClient()
+  const { data: reporteActual, error: reporteError } = await supabase
+    .from("reportes")
+    .select("id, asignado_a")
+    .eq("id", reporteId)
+    .maybeSingle()
+
+  if (reporteError || !reporteActual) {
+    return { error: "No fue posible cargar el reporte." }
+  }
+
+  if (reporteActual.asignado_a === tecnicoId) {
+    revalidatePath(`/reportes/${reporteId}`)
+    return { success: true }
+  }
+
   const { error } = await supabase
     .from("reportes")
     .update({
@@ -122,6 +137,25 @@ export async function asignarReporte(reporteId: string, tecnicoId: string | null
 
   if (error) {
     return { error: "Error al asignar el reporte." }
+  }
+
+  if (tecnicoId) {
+    const { error: pushError } = await supabase.functions.invoke("enviar-push", {
+      body: {
+        table: "reportes",
+        record: {
+          id: reporteId,
+          asignado_a: tecnicoId,
+        },
+        old_record: {
+          asignado_a: reporteActual.asignado_a,
+        },
+      },
+    })
+
+    if (pushError) {
+      console.error("Error enviando push de asignacion", pushError)
+    }
   }
 
   revalidatePath(`/reportes/${reporteId}`)
